@@ -6,15 +6,9 @@ import threading
 import serial
 import json
 import time
-import os
-from dotenv import load_dotenv
-from pymongo import MongoClient
-
-# === Load environment variables ===
-load_dotenv()
 
 # === Arduino Serial Settings ===
-ARDUINO_PORT = '/dev/cu.usbmodem101'  # Adjust USB/Bluetooth port
+ARDUINO_PORT = '/dev/cu.usbmodem101'  # Adjust this if needed
 BAUD_RATE = 9600
 
 # === Initialize Serial Connection ===
@@ -22,21 +16,21 @@ ser = serial.Serial(ARDUINO_PORT, BAUD_RATE, timeout=1)
 time.sleep(2)
 ser.reset_input_buffer()
 
-# === MongoDB Atlas Settings ===
-MONGO_URI = os.getenv('MONGO_URI')  # From .env
-PATIENT_ID = os.getenv('PATIENT_ID')  # From .env
-
-mongo_client = MongoClient(MONGO_URI)
-db = mongo_client['morganhack']    # Database name
-collection = db['readings']         # Collection name
-
 # === Shared Data ===
 latest_sensor_data = {
     "temperature": None,
     "humidity": None,
     "sound": None,
-    "distance": None
+    "distance": None,
+    "alerts": []
 }
+
+# Thresholds
+FEVER_TEMP_THRESHOLD = 38.0
+SOUND_THRESHOLD = 48
+FALL_DISTANCE_CHANGE = 50
+
+last_distance = None
 
 # === Flask App Setup ===
 app = Flask(__name__)
@@ -44,13 +38,13 @@ CORS(app)
 
 # === Background Serial Reader ===
 def read_serial():
-    global latest_sensor_data
+    global latest_sensor_data, last_distance
     while True:
         try:
             line = ser.readline().decode('utf-8', errors='ignore').strip()
 
             if not line:
-                continue
+                continue  # Skip empty lines
 
             if not line.startswith("{") or not line.endswith("}"):
                 print(f"Skipping incomplete line: {line}")
@@ -69,17 +63,19 @@ def read_serial():
             latest_sensor_data["sound"] = data.get("sound")
             latest_sensor_data["distance"] = data.get("distance")
 
-            # === Insert into MongoDB ===
-            record = {
-                "timestamp": time.time(),  # UNIX timestamp
-                "patient_id": PATIENT_ID,  # Loaded from .env
-                "temperature": latest_sensor_data["temperature"],
-                "humidity": latest_sensor_data["humidity"],
-                "sound": latest_sensor_data["sound"],
-                "distance": latest_sensor_data["distance"]
-            }
-            collection.insert_one(record)
-            print(f"Inserted into MongoDB: {record}")
+            alerts = []
+
+            if latest_sensor_data["temperature"] is not None and latest_sensor_data["temperature"] > FEVER_TEMP_THRESHOLD:
+                alerts.append("Fever Detected")
+
+            if latest_sensor_data["sound"] is not None and latest_sensor_data["sound"] > SOUND_THRESHOLD:
+                alerts.append("Loud Sound Detected")
+
+            if last_distance is not None and latest_sensor_data["distance"] is not None and abs(latest_sensor_data["distance"] - last_distance) > FALL_DISTANCE_CHANGE:
+                alerts.append("Fall Detected")
+
+            latest_sensor_data["alerts"] = alerts
+            last_distance = latest_sensor_data["distance"]
 
         except json.JSONDecodeError:
             print("Warning: Bad JSON skipped.")
