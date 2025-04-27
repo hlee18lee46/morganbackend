@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareBotix - AI-Powered Patient Monitoring</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8fafc;
+            scroll-behavior: smooth;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+        }
+        
+        .hero-pattern {
+            background-image: radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.1) 90%);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .feature-icon {
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1);
+            color: #3b82f6;
+        }
+        
+        .countdown {
+            font-family: 'Poppins', monospace;
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .typing-demo {
+            width: 22ch;
+            animation: typing 2s steps(22), blink .5s step-end infinite alternate;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: 3px solid;
+            font-family: monospace;
+        }
+        
+        @keyframes typing {
+            from { width: 0 }
+        }
+            
+        @keyframes blink {
+            50% { border-color: transparent }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg fixed w-full z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <i class="fas fa-heartbeat text-blue-500 text-2xl mr-2"></i>
+                        <span class="text-xl font-bold text-gray-900">CareBotix</span>
+                    </div>
+                </div>
+                <div class="hidden md:ml-6 md:flex md:items-center md:space-x-8">
+                    <a href="#problem" class="text-gray-900 hover:text-blue-600 px-3 py-2 text-sm font-medium">Problem</a>
+                    <a href="#solution" class="text-gray-900 hover:text-blue-600 px-3 py-2 text-sm font-medium">Solution</a>
+                    <a href="#features" class="text-gray-900 hover:text-blue-600 px-3 py-2 text-sm font-medium">Features</a>
+                    <a href="#team" class="text-gray-900 hover:text-blue-600 px-3 py-2 text-sm font-medium">Team</a>
+                    <a href="#contact" class="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition">Get Started</a>
+                </div>
+                <div class="-mr-2 flex items-center md:hidden">
+                    <button type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500" aria-controls="mobile-menu" aria-expanded="false">
+                        <span class="sr-only">Open main menu</span>
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="gradient-bg text-white pt-24 pb-16 md:pt-32 md:pb-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="lg:grid lg:grid-cols-12 lg:gap-8">
+                <div class="px-4 sm:px-0 sm:text-center md:max-w-2xl md:mx-auto lg:col-span-6 lg:text-left lg:flex lg:items-center">
+                    <div>
+                        <h1 class="text-4xl tracking-tight font-extrabold sm:text-5xl md:text-6xl">
+                            <span class="block">AI-Powered</span>
+                            <span class="block text-blue-200">Patient Monitoring</span>
+                        </h1>
+                        <p class="mt-3 text-base text-blue-100 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
+                            Revolutionizing healthcare with real-time fall detection, environmental monitoring, and AI-driven insights.
+                        </p>
+                        <div class="mt-8 sm:mt-12">
+                            <div class="rounded-md shadow">
+                                <a href="#demo" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-blue-700 bg-white hover:bg-gray-50 md:py-4 md:text-lg md:px-10 pulse">
+                                    <i class="fas fa-play-circle mr-2"></i> Live Demo
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-12 relative sm:max-w-lg sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:col-span-6 lg:flex lg:items-center">
+                    <div class="relative mx-auto w-full rounded-lg shadow-lg lg:max-w-md">
+                        <div class="relative block w-full bg-white overflow-hidden">
+                            <img class="w-full" src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="AI healthcare monitoring">
+                            <div class="absolute inset-0 bg-blue-600 opacity-20"></div>
+                            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-blue-900 to-transparent p-6">
+                                <h3 class="text-xl font-bold text-white">Fall Detection Accuracy: <span class="text-blue-300">95%</span></h3>
+                                <p class="mt-1 text-blue-100">Reducing patient injuries by 63%</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Problem Section -->
+    <div id="problem" class="py-16 bg-white hero-pattern">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="lg:text-center">
+                <h2 class="text-base text-blue-600 font-semibold tracking-wide uppercase">The Challenge</h2>
+                <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+                    Healthcare Monitoring Crisis
+                </p>
+                <p class="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
+                    Current patient monitoring systems are expensive, inefficient, and often fail to prevent critical incidents.
+                </p>
+            </div>
+
+            <div class="mt-20">
+                <div class="grid grid-cols-1 gap-12 md:grid-cols-3">
+                    <div class="bg-white rounded-lg shadow-xl overflow-hidden card-hover">
+                        <div class="p-6">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 bg-blue-100 rounded-md p-3">
+                                    <i class="fas fa-dollar-sign text-blue-600 text-xl"></i>
+                                </div>
+                                <div class="ml-5 w-0 flex-1">
+                                    <h3 class="text-lg font-medium text-gray-900">Skyrocketing Costs</h3>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <p class="text-gray-500">
+                                    Nursing costs range from $25-$40 per hour, totaling $200,000+ annually per patient for continuous monitoring.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-xl overflow-hidden card-hover">
+                        <div class="p-6">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 bg-red-100 rounded-md p-3">
+                                    <i class="fas fa-user-nurse text-red-600 text-xl"></i>
+                                </div>
+                                <div class="ml-5 w-0 flex-1">
+                                    <h3 class="text-lg font-medium text-gray-900">Staff Shortages</h3>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <p class="text-gray-500">
+                                    Global shortage of healthcare workers makes 24/7 monitoring impossible in many facilities.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-xl overflow-hidden card-hover">
+                        <div class="p-6">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 bg-purple-100 rounded-md p-3">
+                                    <i class="fas fa-procedures text-purple-600 text-xl"></i>
+                                </div>
+                                <div class="ml-5 w-0 flex-1">
+                                    <h3 class="text-lg font-medium text-gray-900">Patient Falls</h3>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <p class="text-gray-500">
+                                    700,000-1 million patients experience clinical harm from falls annually, with 63% resulting in serious injuries.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Solution Section -->
+    <div id="solution" class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="lg:text-center">
+                <h2 class="text-base text-blue-600 font-semibold tracking-wide uppercase">Our Innovation</h2>
+                <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+                    AI-Powered Patient Monitoring
+                </p>
+                <p class="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
+                    CareBotix combines computer vision, environmental sensing, and intelligent alerts for comprehensive patient care.
+                </p>
+            </div>
+
+            <div class="mt-20">
+                <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                        <div class="p-6">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 bg-blue-100 rounded-md p-3">
+                                    <i class="fas fa-robot text-blue-600 text-xl"></i>
+                                </div>
+                                <div class="ml-5 w-0 flex-1">
+                                    <h3 class="text-lg font-medium text-gray-900">How It Works</h3>
+                                </div>
+                            </div>
+                            <div class="mt-6">
+                                <ul class="space-y-4">
+                                    <li class="flex items-start">
+                                        <div class="flex-shrink-0 mt-1">
+                                            <div class="flex items-center justify-center h-6 w-6 rounded-md bg-blue-500 text-white">
+                                                <i class="fas fa-check text-xs"></i>
+                                            </div>
+                                        </div>
+                                        <p class="ml-3 text-gray-700">
+                                            <span class="font-medium">Real-time Pose Detection:</span> YOLOv8-based monitoring for fall detection and posture analysis
+                                        </p>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="flex-shrink-0 mt-1">
+                                            <div class="flex items-center justify-center h-6 w-6 rounded-md bg-blue-500 text-white">
+                                                <i class="fas fa-check text-xs"></i>
+                                            </div>
+                                        </div>
+                                        <p class="ml-3 text-gray-700">
+                                            <span class="font-medium">Environmental Monitoring:</span> Temperature, humidity, sound, and distance tracking
+                                        </p>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="flex-shrink-0 mt-1">
+                                            <div class="flex items-center justify-center h-6 w-6 rounded-md bg-blue-500 text-white">
+                                                <i class="fas fa-check text-xs"></i>
+                                            </div>
+                                        </div>
+                                        <p class="ml-3 text-gray-700">
+                                            <span class="font-medium">Smart Alerts:</span> Immediate notifications for falls, abnormal postures, or environmental concerns
+                                        </p>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="flex-shrink-0 mt-1">
+                                            <div class="flex items-center justify-center h-6 w-6 rounded-md bg-blue-500 text-white">
+                                                <i class="fas fa-check text-xs"></i>
+                                            </div>
+                                        </div>
+                                        <p class="ml-3 text-gray-700">
+                                            <span class="font-medium">AI Assistant:</span> Gemini-powered chatbot for instant status updates and medical insights
+                                        </p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                        <div class="p-6">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 bg-purple-100 rounded-md p-3">
+                                    <i class="fas fa-chart-line text-purple-600 text-xl"></i>
+                                </div>
+                                <div class="ml-5 w-0 flex-1">
+                                    <h3 class="text-lg font-medium text-gray-900">Technical Advantages</h3>
+                                </div>
+                            </div>
+                            <div class="mt-6">
+                                <div class="bg-gray-50 rounded-lg p-4">
+                                    <div class="flex items-center">
+                                        <div class="flex-shrink-0">
+                                            <i class="fas fa-microchip text-blue-500"></i>
+                                        </div>
+                                        <div class="ml-3">
+                                            <h4 class="text-sm font-medium text-gray-900">Hardware Components</h4>
+                                            <p class="text-xs text-gray-500 mt-1">
+                                                HD Camera, Temperature sensor (±0.5°C), Humidity sensor (±2%), Sound level meter (30-130dB), Ultrasonic distance sensor (2-400cm)
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-4 mt-3">
+                                    <div class="flex items-center">
+                                        <div class="flex-shrink-0">
+                                            <i class="fas fa-code text-green-500"></i>
+                                        </div>
+                                        <div class="ml-3">
+                                            <h4 class="text-sm font-medium text-gray-900">Software Stack</h4>
+                                            <p class="text-xs text-gray-500 mt-1">
+                                                YOLOv8, Google Gemini Pro, MongoDB, PyQt6, REST APIs, WebSocket
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-4 mt-3">
+                                    <div class="flex items-center">
+                                        <div class="flex-shrink-0">
+                                            <i class="fas fa-bolt text-yellow-500"></i>
+                                        </div>
+                                        <div class="ml-3">
+                                            <h4 class="text-sm font-medium text-gray-900">Performance</h4>
+                                            <p class="text-xs text-gray-500 mt-1">
+                                                95% accuracy in fall detection, <100ms latency, supports 10 concurrent video streams
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div id="features" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="lg:text-center">
+                <h2 class="text-base text-blue-600 font-semibold tracking-wide uppercase">Features</h2>
+                <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+                    Comprehensive Patient Protection
+                </p>
+                <p class="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
+                    Advanced monitoring capabilities that go beyond traditional systems
+                </p>
+            </div>
+
+            <div class="mt-20">
+                <div class="space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10">
+                    <div class="feature-card relative bg-gray-50 p-6 rounded-lg transition">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-white rounded-md p-3 shadow-sm">
+                                <i class="fas fa-user-friends feature-icon text-blue-500 text-xl"></i>
+                            </div>
+                            <div class="ml-5">
+                                <h3 class="text-lg leading-6 font-medium text-gray-900">Multi-Patient Monitoring</h3>
+                                <p class="mt-2 text-gray-500">
+                                    Simultaneously track multiple patients with a single system, reducing equipment costs.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="feature-card relative bg-gray-50 p-6 rounded-lg transition">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-white rounded-md p-3 shadow-sm">
+                                <i class="fas fa-comment-medical feature-icon text-green-500 text-xl"></i>
+                            </div>
+                            <div class="ml-5">
+                                <h3 class="text-lg leading-6 font-medium text-gray-900">Sentiment Analysis</h3>
+                                <p class="mt-2 text-gray-500">
+                                    DistilBERT-powered voice analysis to detect pain, distress, or discomfort from patient sounds and speech patterns.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="feature-card relative bg-gray-50 p-6 rounded-lg transition">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-white rounded-md p-3 shadow-sm">
+                                <i class="fas fa-sms feature-icon text-purple-500 text-xl"></i>
+                            </div>
+                            <div class="ml-5">
+                                <h3 class="text-lg leading-6 font-medium text-gray-900">Instant SMS Alerts</h3>
+                                <p class="mt-2 text-gray-500">
+                                    Critical alerts sent to caretakers within <span class="font-bold">10 seconds</span> of detecting an emergency situation.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="feature-card relative bg-gray-50 p-6 rounded-lg transition">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-white rounded-md p-3 shadow-sm">
+                                <i class="fas fa-brain feature-icon text-yellow-500 text-xl"></i>
+                            </div>
+                            <div class="ml-5">
+                                <h3 class="text-lg leading-6 font-medium text-gray-900">Predictive Analytics</h3>
+                                <p class="mt-2 text-gray-500">
+                                    Machine learning models predict potential falls before they happen based on movement patterns.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Demo Section -->
+    <div id="demo" class="py-16 bg-gray-900 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="lg:text-center">
+                <h2 class="text-base text-blue-400 font-semibold tracking-wide uppercase">Live Demonstration</h2>
+                <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-white sm:text-4xl">
+                    See CareBotix in Action
+                </p>
+                <p class="mt-4 max-w-2xl text-xl text-blue-200 lg:mx-auto">
+                    Experience our real-time monitoring system with simulated patient scenarios.
+                </p>
+            </div>
+
+            <div class="mt-12 grid grid-cols-1 gap-8 md:grid-cols-2">
+                <div class="bg-gray-800 rounded-xl p-6 shadow-lg">
+                    <h3 class="text-lg font-medium mb-4">Fall Detection Simulation</h3>
+                    <div class="bg-black rounded-lg overflow-hidden h-64 flex items-center justify-center">
+                        <div class="text-center">
+                            <i class="fas fa-user-slash text-4xl text-red-500 mb-3"></i>
+                            <p class="text-gray-300">Fall detected in 0.8 seconds</p>
+                            <div class="mt-4">
+                                <div class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700">
+                                    <i class="fas fa-bell mr-2"></i> Alert Sent to Caretaker
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-blue-500 rounded-full p-1">
+                                <i class="fas fa-check text-white text-xs"></i>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm text-gray-300">SMS notification sent to caretaker in <span class="font-bold">3.2 seconds</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gray-800 rounded-xl p-6 shadow-lg">
+                    <h3 class="text-lg font-medium mb-4">Pain Detection via Voice</h3>
+                    <div class="bg-black rounded-lg overflow-hidden h-64 flex items-center justify-center">
+                        <div class="text-center">
+                            <i class="fas fa-comment-dots text-4xl text-yellow-500 mb-3"></i>
+                            <p class="text-gray-300 typing-demo">"Ouch! My hip hurts..."</p>
+                            <div class="mt-6">
+                                <div class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-yellow-600 hover:bg-yellow-700">
+                                    <i class="fas fa-exclamation-triangle mr-2"></i> Pain Detected (87% confidence)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-green-500 rounded-full p-1">
+                                <i class="fas fa-check text-white text-xs"></i>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm text-gray-300">DistilBERT model analyzed vocal patterns for pain indicators</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cost Savings Section -->
+    <div class="py-16 bg-blue-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="lg:text-center">
+                <h2 class="text-base text-blue-600 font-semibold tracking-wide uppercase">Financial Benefits</h2>
+                <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+                    Significant Cost Reduction
+                </p>
+                <p class="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
+                    CareBotix delivers superior monitoring at a fraction of traditional costs
+                </p>
+            </div>
+
+            <div class="mt-12">
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div class="px-6 py-8 sm:p-10">
+                        <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
+                            <div>
+                                <h3 class="text-lg font-medium text-gray-900 mb-4">Traditional Care Costs</h3>
+                                <ul class="space-y-4">
+                                    <li class="flex items-start">
+                                        <div class="flex-shrink-0 mt-1">
+                                            <div class="flex items-center justify-center h-6 w-6 rounded-md bg-red-500 text-white">
+                                                <i class="fas fa-times text-xs"></i>
+                                            </div>
+                                        </div>
+                                        <p class="ml-3 text-gray-700">
+                                            <span class="font-medium">$25-$40/hour</span> for nursing staff
+                                        </p>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="flex-shrink-0 mt-1">
+                                            <div class="flex items-center justify-center h-6 w-6 rounded-md bg-red-500 text-white">
+                                                <i class="fas fa-times text-xs"></i>
+                                            </div>
+                                        </div>
+                                        <p class="ml-3 text-gray-700">
+                                            <span class="font-medium">$200,000+ annually</span> per patient for 24/7 monitoring
+                                        </p>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="flex-shrink-0 mt-1">
+                                            <div class="flex items-center justify-center h-6 w-6 rounded-md bg-red-500 text-white">
+                                                <i class="fas fa-times text-xs"></i>
+                                            </div>
+                                        </div>
+                                        <p class="ml-3 text-gray-700">
+                                            <span class="font-medium">High liability costs</span> from undetected falls
+                                        </p>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div>
+                                <h3 class="text-lg font-medium text-gray-900 mb-4">CareBotix Costs</h3>
+                                <ul class="space-y-4">
+                                    <li class="flex items-start">
+                                        <div class="flex-shrink-0 mt-1">
+                                            <div class="flex items-center justify-center h-6 w-6 rounded-md bg-green-500 text-white">
+                                                <i class="fas fa-check text-xs"></i>
+                                            </div>
+                                        </div>
+                                        <p class="ml-3 text-gray-700">
+                                            <span class="font-medium">$500-800</span> one-time hardware cost per unit
+                                        </p>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="flex-shrink-0 mt-1">
+                                            <div class="flex items-center justify-center h-6 w-6 rounded-md bg-green-500 text-white">
+                                                <i class="fas fa-check text-xs"></i>
+                                            </div>
+                                        </div>
+                                        <p class="ml-3 text-gray-700">
+                                            <span class="font-medium">$50/month</span> software license per bed
+                                        </p>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="flex-shrink-0 mt-1">
+                                            <div class="flex items-center justify-center h-6 w-6 rounded-md bg-green-500 text-white">
+                                                <i class="fas fa-check text-xs"></i>
+                                            </div>
+                                        </div>
+                                        <p class="ml-3 text-gray-700">
+                                            <span class="font-medium">90% cost reduction</span> compared to traditional care
+                                        </p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="mt-10 bg-blue-50 rounded-lg p-6">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 bg-blue-100 rounded-md p-3">
+                                    <i class="fas fa-chart-pie text-blue-600 text-xl"></i>
+                                </div>
+                                <div class="ml-5">
+                                    <h3 class="text-lg font-medium text-gray-900">ROI Calculator</h3>
+                                    <p class="mt-2 text-gray-600">
+                                        For a 100-bed facility, CareBotix saves approximately <span class="font-bold">$18 million annually</span> compared to traditional monitoring.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Team Section -->
+    <div id="team" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="lg:text-center">
+                <h2 class="text-base text-blue-600 font-semibold tracking-wide uppercase">Our Team</h2>
+                <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+                    Morgan Hacks 2025 Winners
+                </p>
+                <p class="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
+                    Developed by a passionate team of innovators
+                </p>
+            </div>
+
+            <div class="mt-20">
+                <div class="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-3">
+                    <div class="bg-gray-50 rounded-xl p-8 text-center">
+                        <img class="mx-auto h-32 w-32 rounded-full object-cover shadow-md" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80" alt="Sai Jagadeesh Muralikrishnan">
+                        <h3 class="mt-6 text-lg font-medium text-gray-900">Sai Jagadeesh Muralikrishnan</h3>
+                        <p class="mt-1 text-gray-600">Lead AI Engineer</p>
+                        <p class="mt-2 text-sm text-gray-500">
+                            Developed the YOLOv8 pose detection system and DistilBERT pain recognition models.
+                        </p>
+                        <div class="mt-4 flex justify-center space-x-4">
+                            <a href="#" class="text-blue-500 hover:text-blue-700">
+                                <i class="fab fa-linkedin"></i>
+                            </a>
+                            <a href="#" class="text-blue-500 hover:text-blue-700">
+                                <i class="fab fa-github"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 rounded-xl p-8 text-center">
+                        <img class="mx-auto h-32 w-32 rounded-full object-cover shadow-md" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80" alt="Hanlee">
+                        <h3 class="mt-6 text-lg font-medium text-gray-900">Hanlee</h3>
+                        <p class="mt-1 text-gray-600">Hardware Specialist</p>
+                        <p class="mt-2 text-sm text-gray-500">
+                            Designed the sensor array and edge computing unit for real-time processing.
+                        </p>
+                        <div class="mt-4 flex justify-center space-x-4">
+                            <a href="#" class="text-blue-500 hover:text-blue-700">
+                                <i class="fab fa-linkedin"></i>
+                            </a>
+                            <a href="#" class="text-blue-500 hover:text-blue-700">
+                                <i class="fab fa-github"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 rounded-xl p-8 text-center">
+                        <img class="mx-auto h-32 w-32 rounded-full object-cover shadow-md" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80" alt="Vivek Patel">
+                        <h3 class="mt-6 text-lg font-medium text-gray-900">Vivek Patel</h3>
+                        <p class="mt-1 text-gray-600">Software Architect</p>
+                        <p class="mt-2 text-sm text-gray-500">
+                            Built the backend infrastructure and alert systems including the 10-second SMS notification.
+                        </p>
+                        <div class="mt-4 flex justify-center space-x-4">
+                            <a href="#" class="text-blue-500 hover:text-blue-700">
+                                <i class="fab fa-linkedin"></i>
+                            </a>
+                            <a href="#" class="text-blue-500 hover:text-blue-700">
+                                <i class="fab fa-github"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="bg-blue-700">
+        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8 lg:flex lg:items-center lg:justify-between">
+            <h2 class="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+                <span class="block">Ready to transform patient care?</span>
+                <span class="block text-blue-200">Get started with CareBotix today.</span>
+            </h2>
+            <div class="mt-8 flex lg:mt-0 lg:flex-shrink-0">
+                <div class="inline-flex rounded-md shadow">
+                    <a href="#contact" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-blue-600 bg-white hover:bg-blue-50">
+                        <i class="fas fa-envelope mr-2"></i> Contact Us
+                    </a>
+                </div>
+                <div class="ml-3 inline-flex rounded-md shadow">
+                    <a href="#" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-800 hover:bg-blue-700">
+                        <i class="fas fa-book-open mr-2"></i> Documentation
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Section -->
+    <div id="contact" class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="lg:text-center">
+                <h2 class="text-base text-blue-600 font-semibold tracking-wide uppercase">Contact</h2>
+                <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+                    Get In Touch
+                </p>
+                <p class="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
+                    We'd love to hear from you about implementing CareBotix in your facility.
+                </p>
+            </div>
+
+            <div class="mt-16">
+                <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                        <div class="p-6 sm:p-10">
+                            <h3 class="text-lg font-medium text-gray-900 mb-6">Send us a message</h3>
+                            <form class="space-y-6">
+                                <div>
+                                    <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+                                    <div class="mt-1">
+                                        <input type="text" name="name" id="name" autocomplete="name" class="py-3 px-4 block w-full shadow-sm focus:ring-blue-500 focus:border-blue-500 border-gray-300 rounded-md">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                                    <div class="mt-1">
+                                        <input type="email" name="email" id="email" autocomplete="email" class="py-3 px-4 block w-full shadow-sm focus:ring-blue-500 focus:border-blue-500 border-gray-300 rounded-md">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="organization" class="block text-sm font-medium text-gray-700">Organization</label>
+                                    <div class="mt-1">
+                                        <input type="text" name="organization" id="organization" class="py-3 px-4 block w-full shadow-sm focus:ring-blue-500 focus:border-blue-500 border-gray-300 rounded-md">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="message" class="block text-sm font-medium text-gray-700">Message</label>
+                                    <div class="mt-1">
+                                        <textarea id="message" name="message" rows="4" class="py-3 px-4 block w-full shadow-sm focus:ring-blue-500 focus:border-blue-500 border-gray-300 rounded-md"></textarea>
+                                    </div>
+                                </div>
+                                <div>
+                                    <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                        Send Message
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                        <div class="p-6 sm:p-10">
+                            <h3 class="text-lg font-medium text-gray-900 mb-6">Contact Information</h3>
+                            <div class="space-y-4">
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 bg-blue-100 rounded-md p-3">
+                                        <i class="fas fa-envelope text-blue-600 text-xl"></i>
+                                    </div>
+                                    <div class="ml-4">
+                                        <p class="text-sm font-medium text-gray-500">Email</p>
+                                        <p class="text-sm text-gray-900">team@carebotix.ai</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 bg-blue-100 rounded-md p-3">
+                                        <i class="fas fa-globe text-blue-600 text-xl"></i>
+                                    </div>
+                                    <div class="ml-4">
+                                        <p class="text-sm font-medium text-gray-500">Website</p>
+                                        <p class="text-sm text-gray-900">https://carebotix.ai</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 bg-blue-100 rounded-md p-3">
+                                        <i class="fab fa-twitter text-blue-600 text-xl"></i>
+                                    </div>
+                                    <div class="ml-4">
+                                        <p class="text-sm font-medium text-gray-500">Twitter</p>
+                                        <p class="text-sm text-gray-900">@carebotix</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-10">
+                                <h3 class="text-lg font-medium text-gray-900 mb-4">Request a Demo</h3>
+                                <p class="text-sm text-gray-500 mb-4">
+                                    Schedule a personalized demo to see CareBotix in action at your facility.
+                                </p>
+                                <button type="button" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                    <i class="fas fa-calendar-alt mr-2"></i> Schedule Demo
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white">
+        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-lg font-medium mb-4">CareBotix</h3>
+                    <p class="text-sm text-gray-400">
+                        AI-powered patient monitoring system developed for Morgan Hacks 2025 by Sai Jagadeesh Muralikrishnan, Hanlee, and Vivek Patel.
+                    </p>
+                    <div class="mt-4 flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-lg font-medium mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#problem" class="text-sm text-gray-400 hover:text-white">Problem Statement</a></li>
+                        <li><a href="#solution" class="text-sm text-gray-400 hover:text-white">Our Solution</a></li>
+                        <li><a href="#features" class="text-sm text-gray-400 hover:text-white">Features</a></li>
+                        <li><a href="#demo" class="text-sm text-gray-400 hover:text-white">Live Demo</a></li>
+                        <li><a href="#contact" class="text-sm text-gray-400 hover:text-white">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-medium mb-4">Technical Details</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-sm text-gray-400 hover:text-white">Documentation</a></li>
+                        <li><a href="#" class="text-sm text-gray-400 hover:text-white">API Reference</a></li>
+                        <li><a href="#" class="text-sm text-gray-400 hover:text-white">GitHub Repository</a></li>
+                        <li><a href="#" class="text-sm text-gray-400 hover:text-white">License (MIT)</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-12 pt-8 border-t border-gray-800">
+                <p class="text-sm text-gray-400 text-center">
+                    &copy; 2025 CareBotix. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simple countdown for the SMS alert feature
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu toggle
+            const mobileMenuButton = document.querySelector('.md\\:hidden button');
+            mobileMenuButton.addEventListener('click', function() {
+                // This would toggle a mobile menu in a real implementation
+                console.log('Mobile menu clicked');
+            });
+            
+            // Demo alert simulation
+            const demoButton = document.querySelector('a[href="#demo"]');
+            demoButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('Demo simulation: In a real scenario, this would show our live monitoring system detecting a fall and sending an SMS alert within 10 seconds.');
+            });
+        });
+    </script>
+</body>
+</html>
