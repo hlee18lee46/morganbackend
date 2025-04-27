@@ -4,19 +4,21 @@ import numpy as np
 from datetime import datetime
 from dotenv import load_dotenv
 import os
-from pymongo import MongoClient
+from pymongo import MongoClient, DESCENDING
 import pyqtgraph as pg
 from ultralytics import YOLO
+import google.generativeai as genai
 from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
-    QLabel, QGraphicsView, QGraphicsScene
+    QLabel, QGraphicsView, QGraphicsScene, QTextEdit, QPushButton,
+    QScrollArea
 )
 from PyQt6.QtCore import (
     Qt, QTimer, QRectF, QPointF, QPoint
 )
 from PyQt6.QtGui import (
     QImage, QPixmap, QPainter, QColor, QBrush, QPen,
-    QLinearGradient
+    QLinearGradient, QTextCursor
 )
 from PyQt6.QtCharts import QChart, QChartView, QPieSeries, QLineSeries, QBarSeries, QBarSet, QValueAxis, QBarCategoryAxis
 from collections import deque
@@ -136,13 +138,14 @@ class CaretakerGUI(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("CareBotix - Smart Patient Monitoring System")
-        self.setGeometry(100, 100, 1200, 800)
+        self.setGeometry(100, 100, 1600, 800)  # Made window wider for chat panel
 
         # Initialize components
         self.init_camera()
         self.init_pose_estimation()
         self.init_data_storage()
         self.init_mongodb()
+        self.init_gemini()
         self.init_ui()
 
         # Start timers
@@ -198,6 +201,16 @@ class CaretakerGUI(QMainWindow):
             self.db = None
             self.collection = None
 
+    def init_gemini(self):
+        """Initialize Gemini chatbot"""
+        try:
+            genai.configure(api_key=os.getenv('GEMINI_API_KEY'))
+            self.gemini_model = genai.GenerativeModel("gemini-1.5-pro")
+            print("Gemini chatbot initialized successfully")
+        except Exception as e:
+            print(f"Error initializing Gemini chatbot: {e}")
+            self.gemini_model = None
+
     def init_ui(self):
         # Create main widget and layout
         main_widget = QWidget()
@@ -238,9 +251,9 @@ class CaretakerGUI(QMainWindow):
         left_layout.addWidget(status_alert_widget)
         layout.addWidget(left_panel)
 
-        # Right panel for sensor data
-        right_panel = QWidget()
-        right_layout = QVBoxLayout(right_panel)
+        # Middle panel for sensor data
+        middle_panel = QWidget()
+        middle_layout = QVBoxLayout(middle_panel)
         
         # Temperature chart
         temp_widget = QWidget()
@@ -255,7 +268,7 @@ class CaretakerGUI(QMainWindow):
         self.temp_value_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.temp_value_label.setStyleSheet("QLabel { font-size: 11pt; }")
         temp_layout.addWidget(self.temp_value_label)
-        right_layout.addWidget(temp_widget)
+        middle_layout.addWidget(temp_widget)
         
         # Humidity chart
         humidity_widget = QWidget()
@@ -270,7 +283,7 @@ class CaretakerGUI(QMainWindow):
         self.humidity_value_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.humidity_value_label.setStyleSheet("QLabel { font-size: 11pt; }")
         humidity_layout.addWidget(self.humidity_value_label)
-        right_layout.addWidget(humidity_widget)
+        middle_layout.addWidget(humidity_widget)
         
         # Sound Level chart
         sound_widget = QWidget()
@@ -285,9 +298,123 @@ class CaretakerGUI(QMainWindow):
         self.sound_value_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.sound_value_label.setStyleSheet("QLabel { font-size: 11pt; }")
         sound_layout.addWidget(self.sound_value_label)
-        right_layout.addWidget(sound_widget)
+        middle_layout.addWidget(sound_widget)
+
+        # Distance bar chart
+        distance_widget = QWidget()
+        distance_layout = QVBoxLayout(distance_widget)
+        distance_label = QLabel("Distance from Bed (cm)")
+        distance_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        distance_label.setStyleSheet("QLabel { font-size: 12pt; font-weight: bold; }")
+        distance_layout.addWidget(distance_label)
+        self.distance_chart = BarChart("Distance")
+        distance_layout.addWidget(self.distance_chart)
+        self.distance_value_label = QLabel("-- cm")
+        self.distance_value_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.distance_value_label.setStyleSheet("QLabel { font-size: 11pt; }")
+        distance_layout.addWidget(self.distance_value_label)
+        middle_layout.addWidget(distance_widget)
         
-        layout.addWidget(right_panel)
+        layout.addWidget(middle_panel)
+
+        # Right panel for chat
+        chat_panel = QWidget()
+        chat_layout = QVBoxLayout(chat_panel)
+        
+        # Chat title
+        chat_title = QLabel("CareBotix Assistant")
+        chat_title.setStyleSheet("QLabel { font-size: 14pt; font-weight: bold; color: #2196F3; }")
+        chat_title.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        chat_layout.addWidget(chat_title)
+        
+        # Chat display area
+        self.chat_display = QTextEdit()
+        self.chat_display.setReadOnly(True)
+        self.chat_display.setStyleSheet("""
+            QTextEdit {
+                background-color: #f5f5f5;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                padding: 10px;
+                font-size: 11pt;
+            }
+        """)
+        chat_layout.addWidget(self.chat_display)
+        
+        # Input area
+        input_widget = QWidget()
+        input_layout = QHBoxLayout(input_widget)
+        
+        self.chat_input = QTextEdit()
+        self.chat_input.setMaximumHeight(60)
+        self.chat_input.setPlaceholderText("Type your message here...")
+        self.chat_input.setStyleSheet("""
+            QTextEdit {
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                padding: 5px;
+                font-size: 11pt;
+            }
+        """)
+        input_layout.addWidget(self.chat_input)
+        
+        send_button = QPushButton("Send")
+        send_button.setStyleSheet("""
+            QPushButton {
+                background-color: #2196F3;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                padding: 8px 15px;
+                font-size: 11pt;
+            }
+            QPushButton:hover {
+                background-color: #1976D2;
+            }
+        """)
+        send_button.clicked.connect(self.send_message)
+        input_layout.addWidget(send_button)
+        
+        chat_layout.addWidget(input_widget)
+
+        # FAQ buttons
+        faq_widget = QWidget()
+        faq_layout = QVBoxLayout(faq_widget)
+        faq_layout.setSpacing(5)
+        
+        faq_title = QLabel("Quick Questions")
+        faq_title.setStyleSheet("QLabel { font-size: 12pt; font-weight: bold; color: #424242; }")
+        faq_layout.addWidget(faq_title)
+        
+        faq_questions = [
+            "How is the patient's temperature?",
+            "Is the patient's posture normal?",
+            "What are the current sensor readings?",
+            "Any alerts in the last hour?",
+            "Summarize patient's condition"
+        ]
+        
+        for question in faq_questions:
+            btn = QPushButton(question)
+            btn.setStyleSheet("""
+                QPushButton {
+                    background-color: #f5f5f5;
+                    border: 1px solid #ddd;
+                    border-radius: 5px;
+                    padding: 5px;
+                    text-align: left;
+                    font-size: 10pt;
+                }
+                QPushButton:hover {
+                    background-color: #e0e0e0;
+                }
+            """)
+            btn.clicked.connect(lambda checked, q=question: self.send_faq(q))
+            faq_layout.addWidget(btn)
+        
+        chat_layout.addWidget(faq_widget)
+        
+        layout.addWidget(chat_panel)
 
     def update_frame(self):
         try:
@@ -380,6 +507,12 @@ class CaretakerGUI(QMainWindow):
                 sound = min(float(latest.get('sound', 0)), 100)
                 self.sound_chart.setValue(sound)
                 self.sound_value_label.setText(f"{sound:.0f} dB")
+
+                # Update distance
+                distance = min(float(latest.get('distance', 0)), 30)  # Cap at 30cm
+                scaled_distance = (distance / 30) * 100  # Scale to percentage for bar chart
+                self.distance_chart.setValue(scaled_distance)
+                self.distance_value_label.setText(f"{distance:.1f} cm")
                 
                 # Check for environmental alerts
                 alerts = []
@@ -389,6 +522,8 @@ class CaretakerGUI(QMainWindow):
                     alerts.append("⚠️ High Humidity!")
                 if sound > 80:
                     alerts.append("⚠️ High Noise Level!")
+                if distance < 10:  # Add distance alert
+                    alerts.append("⚠️ Too Close to Bed!")
                 
                 if alerts:
                     self.alert_label.setText("\n".join(alerts))
@@ -405,6 +540,106 @@ class CaretakerGUI(QMainWindow):
             print(f"Error updating sensor data: {e}")
             import traceback
             traceback.print_exc()
+
+    def get_chat_response(self, user_input):
+        """Get response from Gemini chatbot"""
+        try:
+            # Get recent sensor readings
+            sensor_logs = list(
+                self.collection.find({"patient_id": os.getenv('PATIENT_ID', '00000001')})
+                .sort("timestamp", DESCENDING)
+                .limit(20)
+            )
+
+            # Format sensor summaries
+            sensor_summary = "\n".join(
+                f"{i+1}. {datetime.fromtimestamp(log['timestamp']).strftime('%Y-%m-%d %H:%M:%S')} — " +
+                f"Temperature: {log.get('temperature', 'N/A')}°C, " +
+                f"Humidity: {log.get('humidity', 'N/A')}%, " +
+                f"Sound: {log.get('sound', 'N/A')}, " +
+                f"Distance: {log.get('distance', 'N/A')} cm"
+                for i, log in enumerate(sensor_logs)
+            ) or "No sensor data available."
+
+            # Get latest reading for quick reference
+            latest_reading = sensor_logs[0] if sensor_logs else None
+            current_temp = latest_reading.get('temperature', 'N/A') if latest_reading else 'N/A'
+            current_humidity = latest_reading.get('humidity', 'N/A') if latest_reading else 'N/A'
+            current_sound = latest_reading.get('sound', 'N/A') if latest_reading else 'N/A'
+
+            # Build prompt with temperature interpretation guide
+            prompt = f"""You are CareBotix, an empathetic and supportive AI health assistant monitoring a patient's environment.
+
+Current Readings:
+- Temperature: {current_temp}°C
+- Humidity: {current_humidity}%
+- Sound Level: {current_sound} dB
+- Patient Status: {self.pose_status_label.text()}
+- Alerts: {self.alert_label.text()}
+
+Temperature Guide:
+- Normal room temperature: 20-25°C
+- Comfortable for patients: 21-24°C
+- Too warm: >26°C
+- Too cold: <20°C
+
+Recent History:
+{sensor_summary}
+
+Question: {user_input}
+
+Please provide a clear, informative response that:
+1. Directly answers the question
+2. Interprets the values in a medical context
+3. Suggests any relevant actions if needed
+4. Uses a caring, professional tone"""
+
+            # Get response from Gemini
+            response = self.gemini_model.generate_content(prompt)
+            return response.text
+
+        except Exception as e:
+            print(f"Error getting chat response: {e}")
+            import traceback
+            traceback.print_exc()
+            return "I apologize, but I'm having trouble processing your request at the moment. Please try again later."
+
+    def send_message(self):
+        """Send a message to the chatbot"""
+        user_input = self.chat_input.toPlainText().strip()
+        if not user_input:
+            return
+
+        # Add user message to chat display
+        self.chat_display.append(f"<p style='color: #2196F3;'><b>You:</b> {user_input}</p>")
+        self.chat_input.clear()
+
+        # Get and display bot response
+        response = self.get_chat_response(user_input)
+        
+        # Format the response with proper HTML
+        formatted_response = response.replace('\n', '<br>')
+        self.chat_display.append(f"<p style='color: #4CAF50;'><b>CareBotix:</b> {formatted_response}</p>")
+        
+        # Scroll to bottom
+        self.chat_display.verticalScrollBar().setValue(
+            self.chat_display.verticalScrollBar().maximum()
+        )
+
+    def send_faq(self, question):
+        """Send a FAQ question to the chatbot"""
+        self.chat_input.setPlainText(question)
+        self.send_message()
+
+    def keyPressEvent(self, event):
+        """Handle key press events"""
+        if event.key() == Qt.Key.Key_Return and not event.modifiers() & Qt.KeyboardModifier.ShiftModifier:
+            # Send message on Enter (but allow Shift+Enter for new line)
+            if self.chat_input.hasFocus():
+                self.send_message()
+                event.accept()
+                return
+        super().keyPressEvent(event)
 
     def closeEvent(self, event):
         self.cap.release()
