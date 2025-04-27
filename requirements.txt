@@ -1,42 +1,78 @@
 # Core Dependencies
-PyQt6>=6.4.0
-opencv-python>=4.8.0
-numpy>=1.24.0
-python-dotenv>=1.0.0
-pymongo>=4.5.0
-pyqtgraph>=0.13.3
-ultralytics>=8.0.0  # For YOLOv8
-google-generativeai>=0.3.0
+PyQt6==6.9.0
+PyQt6-Qt6==6.9.0
+PyQt6-Charts==6.9.0
+PyQt6-Charts-Qt6==6.9.0
+PyQt6_sip==13.10.0
+opencv-python==4.11.0.86
+numpy==2.1.1
+python-dotenv==1.1.0
+pymongo==4.12.0
+pyqtgraph==0.13.7
+ultralytics==8.3.118
+google-generativeai==0.8.5
 
 # GUI and Visualization
 PyOpenGL>=3.1.0
-PyQt6-Charts>=6.4.0
-PyQt6-WebEngine>=6.4.0
+PyQt6-WebEngine==6.9.0
 
 # Machine Learning and Computer Vision
-torch>=2.0.0
-torchvision>=0.15.0
-tensorflow>=2.13.0  # Optional: for additional ML capabilities
+torch==2.7.0
+torchvision==0.22.0
+tensorflow>=2.13.0
 scikit-learn>=1.3.0
 
-# Data Processing
-pandas>=2.0.0
-scipy>=1.10.0
+# Data Processing and Analysis
+pandas==2.2.3
+scipy==1.15.2
+seaborn==0.13.2
+matplotlib==3.10.1
 
-# Monitoring and Logging
+# API and Networking
+requests==2.32.3
+urllib3==2.4.0
 python-socketio>=5.8.0
-requests>=2.31.0
 websockets>=11.0.3
 
-# Development and Testing
-pytest>=7.4.0
+# Google API Dependencies
+google-api-core==2.25.0rc0
+google-api-python-client==2.168.0
+google-auth==2.39.0
+google-auth-httplib2==0.2.0
+googleapis-common-protos==1.70.0
+grpcio==1.71.0
+grpcio-status==1.71.0
+
+# Utilities and Tools
+tqdm==4.67.1
+pillow==11.2.1
+PyYAML==6.0.2
+psutil==7.0.0
+filelock==3.18.0
+setuptools==79.0.1
+
+# Type Checking and Validation
+pydantic==2.11.3
+pydantic_core==2.33.1
+typing_extensions==4.13.2
+typing-inspection==0.4.0
+
+# Date and Time
+python-dateutil==2.9.0.post0
+pytz==2025.2
+tzdata==2025.2
+
+# Development Dependencies
 black>=23.7.0
 flake8>=6.1.0
 isort>=5.12.0
+pytest>=7.4.0
 
 # Documentation
 Sphinx>=7.1.0
 sphinx-rtd-theme>=1.3.0
+Jinja2==3.1.6
+MarkupSafe==3.0.2
 
 # Flask and related packages
 Flask>=2.2
@@ -51,3 +87,39 @@ fer>=22.4.0  # Facial Expression Recognition
 # New dependencies
 google-generativeai>=0.3.0
 
+PyQt6>=6.4.0
+PyQt6-Charts>=6.4.0
+pyqtgraph>=0.13.3
+
+annotated-types==0.7.0
+cachetools==5.5.2
+certifi==2025.4.26
+charset-normalizer==3.4.1
+contourpy==1.3.2
+cycler==0.12.1
+dnspython==2.7.0
+fonttools==4.57.0
+fsspec==2025.3.2
+google-ai-generativelanguage==0.6.15
+google-auth==2.39.0
+google-auth-httplib2==0.2.0
+google-generativeai==0.8.5
+googleapis-common-protos==1.70.0
+grpcio==1.71.0
+grpcio-status==1.71.0
+httplib2==0.22.0
+idna==3.10
+kiwisolver==1.4.8
+MarkupSafe==3.0.2
+mpmath==1.3.0
+networkx==3.4.2
+numpy==2.1.1
+packaging==25.0
+proto-plus==1.26.1
+protobuf==5.29.4
+rsa==4.9.1
+six==1.17.0
+sympy==1.13.3
+tqdm==4.67.1
+uritemplate==4.1.1
+urllib3==2.4.0
