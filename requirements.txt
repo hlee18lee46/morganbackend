@@ -1,0 +1,31 @@
+# Core CV & ML
+ultralytics>=8.0.0
+opencv-python>=4.8.0
+numpy>=1.24.0
+pandas>=2.2
+scikit-learn>=1.2
+torch>=2.0.0
+torchvision>=0.15.0
+
+# Flask and related packages
+Flask>=2.2
+Flask-CORS>=4.0.0
+Flask-SocketIO>=5.3.0
+eventlet>=0.33.0
+
+# Database
+pymongo>=4.3.3
+
+# Additional dependencies
+shapely>=2.0.1
+scipy>=1.11.0
+fer>=22.4.0  # Facial Expression Recognition
+
+# New dependencies
+python-dotenv>=1.0.0
+google-generativeai>=0.3.0
+
+PyQt6>=6.4.0
+PyQt6-Charts>=6.4.0
+pyqtgraph>=0.13.3
+
