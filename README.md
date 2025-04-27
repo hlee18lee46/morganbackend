@@ -99,36 +99,100 @@ Compared to traditional care: 90% cost reduction
 - Emergency service integration
 - Mesh networking for hospital-wide coverage
 
-## Getting Started 🚀
+## Installation Guide 🔧
 
-### Prerequisites
-- Python 3.8+
-- MongoDB
-- Webcam/Camera device
-- Required sensors
+### System Requirements
+- Python 3.8+ (3.10 recommended)
+- CUDA-capable GPU (for optimal YOLOv8 performance)
+- Webcam or IP camera
+- MongoDB 5.0+
+- Environmental sensors (temperature, humidity, sound, distance)
 
-### Installation
+### Step-by-Step Installation
+
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/carebotix.git
-   cd carebotix
+   git clone https://github.com/hlee18lee46/morganbackend.git
+   cd morganbackend
+   git checkout carebotix-gui
    ```
 
-2. Install dependencies:
+2. Create and activate a virtual environment:
    ```bash
+   # Windows
+   python -m venv venv
+   .\venv\Scripts\activate
+
+   # Linux/Mac
+   python3 -m venv venv
+   source venv/bin/activate
+   ```
+
+3. Install dependencies:
+   ```bash
+   pip install --upgrade pip
    pip install -r requirements.txt
    ```
 
-3. Configure environment variables:
+4. Install additional system dependencies:
    ```bash
-   MONGO_URI=your_mongodb_uri
-   GEMINI_API_KEY=your_gemini_api_key
+   # Ubuntu/Debian
+   sudo apt-get update
+   sudo apt-get install -y libgl1-mesa-glx libglib2.0-0
+
+   # Windows
+   # Install Visual C++ Redistributable from Microsoft's website
    ```
 
-4. Run the application:
+5. Configure environment variables:
+   Create a `.env` file in the project root:
+   ```env
+   MONGO_URI=your_mongodb_uri
+   GEMINI_API_KEY=your_gemini_api_key
+   PATIENT_ID=default_patient_id
+   ```
+
+6. Initialize the database:
+   ```bash
+   # Start MongoDB service
+   # Windows
+   net start MongoDB
+
+   # Linux
+   sudo systemctl start mongod
+   ```
+
+7. Run the application:
    ```bash
    python caretaker_gui.py
    ```
+
+### Dependency Details
+
+Our system relies on several key packages:
+
+#### Core Components
+- **PyQt6**: Modern GUI framework
+- **OpenCV**: Real-time video processing
+- **YOLOv8**: Pose detection and tracking
+- **MongoDB**: Data storage and retrieval
+- **Google Generative AI**: Chatbot functionality
+
+#### Machine Learning
+- **PyTorch**: Deep learning operations
+- **TensorFlow**: Additional ML capabilities
+- **Scikit-learn**: Data processing
+
+#### Visualization
+- **PyQtChart**: Real-time data visualization
+- **PyOpenGL**: 3D background animations
+- **Pyqtgraph**: Real-time plotting
+
+#### Development Tools
+- **Pytest**: Testing framework
+- **Black**: Code formatting
+- **Flake8**: Code linting
+- **Sphinx**: Documentation generation
 
 ## Testing and Validation ✅
 - Unit Tests: 95% coverage
