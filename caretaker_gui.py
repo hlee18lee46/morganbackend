@@ -24,6 +24,7 @@ from PyQt6.QtCharts import QChart, QChartView, QPieSeries, QLineSeries, QBarSeri
 from collections import deque
 from pose_estimation import PoseEstimator
 from anomaly_detection import AnomalyDetector
+from sms_alert import send_sms_alert
 
 class DonutChart(QWidget):
     def __init__(self, parent=None):
@@ -139,6 +140,10 @@ class CaretakerGUI(QMainWindow):
         super().__init__()
         self.setWindowTitle("CareBotix - Smart Patient Monitoring System")
         self.setGeometry(100, 100, 1600, 800)  # Made window wider for chat panel
+
+        # Initialize fall alert tracking
+        self.fall_alert_start_time = None
+        self.sms_sent = False
 
         # Initialize components
         self.init_camera()
@@ -454,17 +459,71 @@ class CaretakerGUI(QMainWindow):
 
             # Check for lying down pose and update alerts
             if pose_status == 'lying':
-                self.alert_label.setText('⚠️ ALERT: Person may have fallen!')
-                self.alert_label.setStyleSheet('color: red; font-size: 14pt; font-weight: bold;')
+                # Start tracking fall alert time if not already tracking
+                if self.fall_alert_start_time is None:
+                    self.fall_alert_start_time = datetime.now()
+                    self.sms_sent = False
+                    print("Fall detected - starting timer")
+                    # Immediately show alert in red
+                    self.alert_label.setText('⚠️ ALERT: Person may have fallen!')
+                    self.alert_label.setStyleSheet('color: red; font-size: 14pt; font-weight: bold;')
+
+                # Calculate how long the alert has been active
+                alert_duration = (datetime.now() - self.fall_alert_start_time).total_seconds()
+                print(f"Fall alert duration: {alert_duration:.1f} seconds")
+
+                # Send SMS if alert persists for 5 seconds and hasn't been sent yet
+                if alert_duration >= 5 and not self.sms_sent:
+                    try:
+                        # Get latest sensor data for the message
+                        latest_reading = None
+                        if self.collection is not None:  # Fixed collection check
+                            try:
+                                latest_reading = self.collection.find_one(
+                                    {"patient_id": os.getenv('PATIENT_ID', '00000001')},
+                                    sort=[('timestamp', -1)]
+                                )
+                            except Exception as e:
+                                print(f"Error fetching sensor data: {str(e)}")
+
+                        # Create detailed message
+                        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                        details = []
+                        if latest_reading:
+                            details.extend([
+                                f"Temperature: {latest_reading.get('temperature', 'N/A')}°C",
+                                f"Distance from bed: {latest_reading.get('distance', 'N/A')}cm"
+                            ])
+                        
+                        message = (
+                            f"[{timestamp}] URGENT: Patient Fall Detected\n"
+                            f"Alert Duration: {int(alert_duration)}s\n"
+                            f"Details: {', '.join(details)}\n"
+                            "Immediate caregiver attention required!"
+                        )
+                        
+                        print("Sending SMS alert...")
+                        send_sms_alert(message)
+                        self.sms_sent = True
+                        print("SMS alert sent successfully")
+                        
+                        # Update alert label with SMS notification
+                        self.alert_label.setText('⚠️ URGENT: Fall Detected - SMS Alert Sent to Caregiver!')
+                        self.alert_label.setStyleSheet('color: red; font-size: 14pt; font-weight: bold;')
+                    except Exception as e:
+                        print(f"Failed to send SMS alert: {str(e)}")
+                        import traceback
+                        traceback.print_exc()
             else:
-                current_alerts = self.alert_label.text().split('\n')
-                # Keep environmental alerts but remove fall alert
-                env_alerts = [alert for alert in current_alerts if not alert.endswith('fallen!')]
-                if env_alerts:
-                    self.alert_label.setText('\n'.join(env_alerts))
-                else:
-                    self.alert_label.setText('Status: Normal')
-                    self.alert_label.setStyleSheet('color: green; font-size: 14pt;')
+                # Reset fall tracking when pose is no longer 'lying'
+                if self.fall_alert_start_time is not None:
+                    print("Fall alert cleared - person no longer lying down")
+                self.fall_alert_start_time = None
+                self.sms_sent = False
+                
+                # Reset alert label
+                self.alert_label.setText('Status: Normal')
+                self.alert_label.setStyleSheet('color: green; font-size: 14pt;')
 
             # Convert annotated frame to QImage and display
             rgb_frame = cv2.cvtColor(annotated_frame, cv2.COLOR_BGR2RGB)
@@ -508,11 +567,24 @@ class CaretakerGUI(QMainWindow):
                 self.sound_chart.setValue(sound)
                 self.sound_value_label.setText(f"{sound:.0f} dB")
 
-                # Update distance
-                distance = min(float(latest.get('distance', 0)), 30)  # Cap at 30cm
-                scaled_distance = (distance / 30) * 100  # Scale to percentage for bar chart
-                self.distance_chart.setValue(scaled_distance)
-                self.distance_value_label.setText(f"{distance:.1f} cm")
+                # Update distance with better error handling and scaling
+                try:
+                    distance = float(latest.get('distance', 0))
+                    # Ensure distance is positive and cap at 100cm for visualization
+                    distance = max(0, min(distance, 100))
+                    
+                    # Scale distance for bar chart (0-100cm maps to 0-100%)
+                    scaled_distance = (distance / 100) * 100
+                    
+                    self.distance_chart.setValue(scaled_distance)
+                    self.distance_value_label.setText(f"{distance:.1f} cm")
+                    
+                    # Update distance alert threshold
+                    if distance < 30:  # Alert if closer than 30cm
+                        self.alert_label.setText("⚠️ Patient too close to bed!")
+                        self.alert_label.setStyleSheet("color: red; font-size: 14pt; font-weight: bold;")
+                except (ValueError, TypeError) as e:
+                    print(f"Error processing distance value: {e}")
                 
                 # Check for environmental alerts
                 alerts = []
@@ -522,17 +594,14 @@ class CaretakerGUI(QMainWindow):
                     alerts.append("⚠️ High Humidity!")
                 if sound > 80:
                     alerts.append("⚠️ High Noise Level!")
-                if distance < 10:  # Add distance alert
-                    alerts.append("⚠️ Too Close to Bed!")
                 
                 if alerts:
-                    self.alert_label.setText("\n".join(alerts))
-                    self.alert_label.setStyleSheet("QLabel { color: red; font-size: 14pt; font-weight: bold; }")
-                else:
-                    self.alert_label.setText("Environment: Normal")
-                    self.alert_label.setStyleSheet("QLabel { color: green; font-size: 14pt; }")
+                    current_alert = self.alert_label.text()
+                    if not current_alert.startswith("⚠️ Patient too close"):  # Don't override distance alert
+                        self.alert_label.setText("\n".join(alerts))
+                        self.alert_label.setStyleSheet("color: red; font-size: 14pt; font-weight: bold;")
                 
-                print(f"Updated values - Temp: {temperature}, Humidity: {humidity}, Sound: {sound}")
+                print(f"Updated values - Temp: {temperature}, Humidity: {humidity}, Sound: {sound}, Distance: {distance:.1f}")
             else:
                 print("No sensor readings found")
 
