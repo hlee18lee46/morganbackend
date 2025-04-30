@@ -199,18 +199,7 @@ Our system relies on several key packages:
 - Integration Tests: 90% coverage
 - Load Testing: Supports up to 10 concurrent video streams
 - Penetration Testing: OWASP Top 10 compliant
-
-## Contributing 🤝
-We welcome contributions! Please see our contributing guidelines for more details.
-
-## License 📄
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Contact 📧
-- Email: team@carebotix.ai
-- Website: https://carebotix.ai
-- Twitter: @carebotix
-
+  
 ## Acknowledgments 🙏
 - Healthcare partners for testing and feedback
 - Open-source community for YOLOv8
